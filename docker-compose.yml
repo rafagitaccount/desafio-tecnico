@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  php:
+    image: php:7.4-apache
+    container_name: env-php
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /home/dev/temp/desafio-k/:/var/www/html
+    links:
+      - db
+
+  db:
+    image: mysql:latest
+    container_name: env-mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - /var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=dEsafio@kabum
