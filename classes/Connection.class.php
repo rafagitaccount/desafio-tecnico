@@ -2,9 +2,9 @@
 
 abstract class Connection {
 
-    public static $instance;
+    private static $instance;
 
-    public static function getInstance() {
+    private static function getInstance() {
 
         if (!isset(self::$instance)) {
             try {

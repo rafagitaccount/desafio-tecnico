@@ -1,5 +1,6 @@
 <?php
 //session_start();
+
 require_once 'crudCustomer.php';
 
 class Customer extends Connection implements crudCustomer {
@@ -88,7 +89,7 @@ class Customer extends Connection implements crudCustomer {
         $rg = $this->getRg();
         $phone = $this->getPhone();
 
-        $sql = `INSERT INTO customer (name,birthdate,cpf,rg,phone) values(:name, :birthdate, :cpf, :rg, :phone)`;
+        $sql = "INSERT INTO customer (name,birthdate,cpf,rg,phone) values(:name, :birthdate, :cpf, :rg, :phone)";
 
         $stmt = Connection::prepare($sql);
 
