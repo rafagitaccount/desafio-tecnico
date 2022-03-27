@@ -2,23 +2,19 @@
 
 abstract class Connection {
 
-    private static $instance;
+    private $servDB = 'mysql:host=db;dbname=desafio_k';
+    private $user   = 'root';
+    private $pwd    = 'dEsafio@kabum';
 
-    private static function getInstance() {
+    protected function connect() {
+        try {
 
-        if (!isset(self::$instance)) {
-            try {
-                self::$instance = new PDO('mysql:host=db; dbname=desafio_k', 'root', 'dEsafio@kabum');
-                self::$instance->exec("set names utf8");
-            } catch (PDOException $e) {
-                echo $e->getMessage();
-            }
+            $conn = new PDO($this->servDB, $this->user, $this->pwd);
+            $conn->exec("set names utf8");
+            return $conn;
+        } catch (PDOException $e) {
+
+            echo $e->getMessage();
         }
-
-        return self::$instance;
-    }
-
-    protected function prepare($sql) {
-        return self::getInstance()->prepare($sql);
     }
 }

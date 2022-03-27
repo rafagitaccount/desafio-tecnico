@@ -1,4 +1,5 @@
 <?php
+
 //session_start();
 
 require_once 'crudCustomer.php';
@@ -68,10 +69,13 @@ class Customer extends Connection implements crudCustomer {
         $this->setId($id);
         $_id = $this->getId();
 
-        $sql = "SELECT * FROM customer WHERE id = :id";
+        $conn = $this->connect();
 
-        $stmt = Connection::prepare($sql);
+        $sql = "SELECT * FROM customer WHERE id = :id";
+        $stmt = $conn->prepare($sql);
+
         $stmt->bindParam(':id', $_id);
+
         $stmt->execute();
 
         $result = $stmt->fetchAll();
@@ -83,15 +87,17 @@ class Customer extends Connection implements crudCustomer {
 
     // Interface methods
     public function create() {
-        $name = $this->getName();
+        $name      = $this->getName();
         $birthdate = $this->getBirthdate();
-        $cpf = $this->getCpf();
-        $rg = $this->getRg();
-        $phone = $this->getPhone();
+        $cpf       = $this->getCpf();
+        $rg        = $this->getRg();
+        $phone     = $this->getPhone();
+
+        $conn = $this->connect();
 
         $sql = "INSERT INTO customer (name,birthdate,cpf,rg,phone) values(:name, :birthdate, :cpf, :rg, :phone)";
 
-        $stmt = Connection::prepare($sql);
+        $stmt = $conn->prepare($sql);
 
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':birthdate', $birthdate);
@@ -103,15 +109,18 @@ class Customer extends Connection implements crudCustomer {
             $_SESSION['sucesso'] = "Cadastrado com sucesso!";
             $destino = header("Location:/../public/customer.php");
         else :
-            $_SESSION['erro'] = "Cliente já cadastrado!";
+            $_SESSION['erro'] = "Houve um erro durante o cadastro!";
             $destino = header("Location:/../public/customer.php");
         endif;
     }
 
     public function read() {
+
+        $conn = $this->connect();
+
         $sql = "SELECT * FROM customer";
 
-        $stmt = Connection::prepare($sql);
+        $stmt = $conn->prepare($sql);
         $stmt->execute();
 
         $result = $stmt->fetchAll();
@@ -140,8 +149,8 @@ class Customer extends Connection implements crudCustomer {
             echo "<td>$_rg</td>";
             echo "<td>$_phone</td>";
             echo "<td><a href='edit-customer.php?id=$_id'><i class='material-icons left'>edit</i>Editar</a></td>";
-            echo "<td><a href='del-customer.php?id=$_id'><i class='material-icons left'>delete</i>Apagar</a></td>";
-            echo "<td><a href='new-customer.php?id=$_id'><i class='material-icons left'>person_add</i>Novo</a></td>";
+            echo "<td><a href='../database/customer/delete.php?id=$_id'><i class='material-icons left'>delete</i>Apagar</a></td>";
+            echo "<td><a href='customer.php'><i class='material-icons left'>domain</i>Novo Endereço</a></td>";
 
             echo "</tr>";
 
@@ -163,9 +172,11 @@ class Customer extends Connection implements crudCustomer {
         $rg        = $this->getRg();
         $phone     = $this->getPhone();
 
+        $conn = $this->connect();
+
         $sql = "update customer set name = :name, birthdate = :birthdate, cpf = :cpf, rg = :rg, phone = :phone where id = :id";
 
-        $stmt = Connection::prepare($sql);
+        $stmt = $conn->prepare($sql);
 
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':name', $name);
@@ -179,5 +190,17 @@ class Customer extends Connection implements crudCustomer {
     }
 
     public function delete($id) {
+        $conn = $this->connect();
+
+        $this->setId($id);
+        $_id = $this->getId();
+
+        $sql = "delete from customer where id = :id";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $_id);
+        $stmt->execute();
+
+        $destino = header("Location:../../public/customer.php");
     }
 }
