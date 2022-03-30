@@ -150,7 +150,7 @@ class Customer extends Connection implements crudCustomer {
             echo "<td>$_phone</td>";
             echo "<td><a href='edit-customer.php?id=$_id'><i class='material-icons left'>edit</i>Editar</a></td>";
             echo "<td><a href='../database/customer/delete.php?id=$_id'><i class='material-icons left'>delete</i>Apagar</a></td>";
-            echo "<td><a href='customer.php'><i class='material-icons left'>domain</i>Novo Endereço</a></td>";
+            echo "<td><a href='new-address.php?id=$_id'><i class='material-icons left'>domain</i>Novo Endereço</a></td>";
 
             echo "</tr>";
 
